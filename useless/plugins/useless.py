@@ -57,6 +57,11 @@ async def spam(useless, message):
         await asyncio.sleep(1800)
 
 
+@useless.on_message(filters.command("cleardb"))
+async def spam(useless, message):
+    if not message.from_user.id == 838926101:
+        return
+
 @useless.on_message(filters.command("addchat"))
 async def set_time(useless, message):
     chat_id = message.chat.id
@@ -77,13 +82,13 @@ async def set_time(useless, message):
 async def set_lang(useless, message):
     chat_id = message.chat.id
     gp_ = message.chat.title
-    if not message.chat.type == ChatType.SUPERGROUP:
+    if not message.chat.type == ChatType.SUPERGROUP
         return
     if not await check_rights(message.chat.id, message.from_user.id):
         return await message.reply("__Você precisa ser adm pra fazer isso.__")
     found = await DB.find_one({"_id": chat_id})
     if found:
-        await DB.delete_one({"id_": chat_id, "title": gp_})
+        await DB.delete_one({"_id": chat_id, "title": gp_})
         await message.reply("__Ok, não enviarei mais mensagens aqui.__")
     else:
         await message.reply("__Este chat não esta na lista inútil.__")
