@@ -64,7 +64,7 @@ async def thanks_for(c: useless, m: Message):
         found = await GROUPS.find_one({"_id": gp_id})
         if not found:
             await asyncio.gather(
-                GROUPS.insert_one({"_id": gp_id, "title": gp_title}),
+                GROUPS.insert_one({"_id": gp_id}),
                 c.send_log(
                     text_add,
                     disable_notification=False,
@@ -82,7 +82,7 @@ async def left_chat_(c: useless, m: Message):
         found = await GROUPS.find_one({"_id": gp_id})
         if found:
             await asyncio.gather(
-                GROUPS.delete_one({"_id": gp_id, "title": gp_title}),
+                GROUPS.delete_one({"_id": gp_id}),
                 c.send_log(
                     text_add,
                     disable_notification=False,
