@@ -93,7 +93,7 @@ async def left_chat_(c: useless, m: Message):
             return
 
 
-FRASES [
+FRASES = [
   "Toda cagada requer uma mijada, mas nem toda mijada requer uma cagada ~ `Leonardo Davinci`.",
   "Nem todo humano é gay, e nem todo gay é humano ~ `Nelson Mandela`",
   "Não tem problema peidar enquanto mija afinal, não existe chuva sem trovão ~ `Martin Luther King`",
