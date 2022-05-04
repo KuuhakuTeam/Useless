@@ -8,6 +8,7 @@
 import os
 import sys
 import json
+import random
 import asyncio
 import requests
 
@@ -53,7 +54,7 @@ async def spam(useless, message):
     await useless.send_message(message.chat.id, "loop started")
     while True:
         await infos_()
-        await asyncio.sleep(1800)
+        await asyncio.sleep(10)
 
 
 @useless.on_message(filters.command("cleardb"))
