@@ -12,12 +12,12 @@ import asyncio
 from motor.core import AgnosticClient, AgnosticCollection, AgnosticDatabase
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from . import DB_URI
+from useless import Config
 
 print("Connecting to Database ...")
 
 
-_MGCLIENT: AgnosticClient = AsyncIOMotorClient(DB_URI)
+_MGCLIENT: AgnosticClient = AsyncIOMotorClient(Config.DB_URI)
 _RUN = asyncio.get_event_loop().run_until_complete
 
 if "useless" in _RUN(_MGCLIENT.list_database_names()):

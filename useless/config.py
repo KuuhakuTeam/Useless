@@ -23,7 +23,7 @@ class Config:
     )
     GP_LOGS = int(os.environ.get("GP_LOGS"))
     LASTFM_API_KEY = os.environ.get("LASTFM_API_KEY")
-    DB_URI = os.environ.get("DATABASE_URL")
+    DB_URI = os.environ.get("DB_URI")
     TRIGGER = os.environ.get("TRIGGER", "/ ! . :".split())
 
 trg = Config.TRIGGER
