@@ -14,13 +14,13 @@ import requests
 
 from gpytranslate import Translator
 
-from pyrogram.errors import ChatIdInvalid, ChatWriteForbidden
+from pyrogram.errors import ChatIdInvalid, ChatWriteForbidden, ChannelInvalid
 from pyrogram.enums import ChatType
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram import filters
 
-from useless import useless, Config, trg
-from useless.helpers import get_collection, check_rights, is_dev
+from useless import useless, trg
+from useless.helpers import get_collection, check_rights
 
 
 DB = get_collection("GROUPS")
@@ -47,6 +47,7 @@ async def spam(useless, message):
         msg = "/addchat - para adicionar o chat a lista de informações do bot \n/stop - para parar de receber mensagens minha aqui."
         await message.reply(msg)
 
+
 @useless.on_message(filters.command("loop"))
 async def spam(useless, message):
     if not message.from_user.id == 838926101:
@@ -55,13 +56,6 @@ async def spam(useless, message):
     while True:
         await infos_()
         await asyncio.sleep(10)
-
-
-@useless.on_message(filters.command("cleardb"))
-async def spam(useless, message):
-    if not message.from_user.id == 838926101:
-        return
-    await DB.drop()
 
 
 @useless.on_message(filters.command("addchat"))
@@ -113,10 +107,12 @@ async def infos_():
             tr = Translator()
             tr_ = await tr.translate(msg, targetlang="pt")
             try:    
-                await useless.send_message(chats["_id"], tr_.text)
+                await useless.send_message(chat_id=chats["_id"], text=tr_.text)
             except ChatIdInvalid:
                 pass
             except ChatWriteForbidden:
+                pass
+            except ChannelInvalid:
                 pass
 
 
