@@ -41,11 +41,10 @@ async def spam(useless, message):
         ]
     )
     if message.chat.type == ChatType.PRIVATE:
-        await useless.send_photo(message.chat.id, "https://telegra.ph/file/c8fbbcb6a72c7bdf98ade.jpg", reply_markup=keyboard)
+        await useless.send_photo(message.chat.id, "https://telegra.ph/file/c8fbbcb6a72c7bdf98ade.jpg", caption=random.choice(RANDOM), reply_markup=keyboard)
     else:
         msg = "/addchat - para adicionar o chat a lista de informações do bot \n/stop - para parar de receber mensagens minha aqui."
         await message.reply(msg)
-
 
 @useless.on_message(filters.command("loop"))
 async def spam(useless, message):
@@ -118,3 +117,13 @@ async def infos_():
                 pass
             except ChatWriteForbidden:
                 pass
+
+
+RANDOM = [
+  "Ketchup foi vendido como remédio nos anos de 1830.",
+  "Os pinguins têm glândulas abaixo dos olhos para extrair o excesso de sal. Elas são poderosas o bastante para permitir que eles tenham a água do mar como principal fonte de água",
+  "Cavalos não conseguem vomitar.",
+  "A baleia assassina é a predadora natural do alce. Baleias assassinas atacam os alces enquanto eles nadam de uma ilha a outra na busca por comida",
+  "No Japão feudal, os lordes propositalmente construíam casas com um pavimento que chiava, como medida defensiva contra ninjas.",
+  "Um segundo é chamado de um segundo porque é a segunda divisão da hora por 60, sendo a primeira divisão o minuto."
+  ]

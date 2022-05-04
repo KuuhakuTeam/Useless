@@ -29,10 +29,8 @@ async def status_(_, m: Message):
     cpu_usage = psutil.cpu_percent()
     ram_usage = psutil.virtual_memory().percent
     glist = await GROUPS.estimated_document_count()
-    ulist = await USERS.estimated_document_count()
     await msg.edit(f"""
 ╭─❑ 「 **Bot Stats** 」 ❑──
-│- __Users:__ `{ulist}`
 │- __Groups:__ `{glist}`
 ╰❑
 
@@ -95,7 +93,7 @@ async def left_chat_(c: useless, m: Message):
 
 FRASES = [
   "Toda cagada requer uma mijada, mas nem toda mijada requer uma cagada ~ `Leonardo Davinci`.",
-  "Nem todo humano é gay, e nem todo gay é humano ~ `Nelson Mandela`",
+  "Nem todo homem e gay, mas todo gay e homem ~ `Nelson Mandela`",
   "Não tem problema peidar enquanto mija afinal, não existe chuva sem trovão ~ `Martin Luther King`",
   "Nem todo corinthiano é ladrão, mas rodo ladrão é corinthiano ~ `Freud`"
   ]
