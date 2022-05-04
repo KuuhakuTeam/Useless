@@ -65,7 +65,8 @@ async def set_time(useless, message):
         return
     if not await check_rights(message.chat.id, message.from_user.id):
         return await message.reply("__Você precisa ser adm pra fazer isso.__")
-    if await check_chat(chat_id):
+    found = await DB.find_one({"_id": chat_id})
+    if found:
         await message.reply("__O chat ja esta na lista inútil.__")
     else:
         await DB.insert_one({"_id": chat_id, "title": gp_})
@@ -80,7 +81,8 @@ async def set_lang(useless, message):
         return
     if not await check_rights(message.chat.id, message.from_user.id):
         return await message.reply("__Você precisa ser adm pra fazer isso.__")
-    if check_chat(chat_id):
+    found = await DB.find_one({"_id": chat_id})
+    if found:
         await DB.delete_one({"id_": chat_id, "title": gp_})
         await message.reply("__Ok, não enviarei mais mensagens aqui.__")
     else:
@@ -111,9 +113,3 @@ async def infos_():
                 pass
             except ChatWriteForbidden:
                 pass
-
-
-async def check_chat(gid: int) -> bool:
-    found = await DB.find_one({"_id": gid})
-    if found:
-        return True
