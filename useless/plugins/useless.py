@@ -82,7 +82,7 @@ async def set_time(useless, message):
 async def set_lang(useless, message):
     chat_id = message.chat.id
     gp_ = message.chat.title
-    if not message.chat.type == ChatType.SUPERGROUP
+    if not message.chat.type == ChatType.SUPERGROUP:
         return
     if not await check_rights(message.chat.id, message.from_user.id):
         return await message.reply("__Você precisa ser adm pra fazer isso.__")
