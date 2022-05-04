@@ -22,8 +22,8 @@ class Config:
         838926101,  # @fnixdev <= put your id here
     )
     GP_LOGS = int(os.environ.get("GP_LOGS"))
-    LASTFM_API_KEY = os.environ.get("LASTFM_API_KEY")
     DB_URI = os.environ.get("DB_URI")
     TRIGGER = os.environ.get("TRIGGER", "/ ! . :".split())
+    TIMER = int(os.environ.get("TIMER"))
 
 trg = Config.TRIGGER

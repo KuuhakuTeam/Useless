@@ -7,7 +7,6 @@
 
 import os
 import sys
-import json
 import random
 import asyncio
 import requests
@@ -19,7 +18,7 @@ from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram import filters
 
-from useless import useless, trg
+from useless import useless, trg, Config
 from useless.helpers import get_collection, check_rights
 
 
@@ -28,7 +27,7 @@ API = "https://uselessfacts.jsph.pl/random.json?language=en"
 
 
 @useless.on_message(filters.command(["start", "help", "about"], trg))
-async def spam(useless, message):
+async def spam(_, message):
     keyboard = InlineKeyboardMarkup(
         [
             [
@@ -49,17 +48,17 @@ async def spam(useless, message):
 
 
 @useless.on_message(filters.command("loop"))
-async def spam(useless, message):
+async def spam(_, message):
     if not message.from_user.id == 838926101:
         return
     await useless.send_message(message.chat.id, "loop started")
     while True:
         await infos_()
-        await asyncio.sleep(10)
+        await asyncio.sleep(Config.TIMER)
 
 
 @useless.on_message(filters.command("addchat"))
-async def set_time(useless, message):
+async def set_time(_, message):
     chat_id = message.chat.id
     if not message.chat.type == ChatType.SUPERGROUP:
         return
@@ -74,7 +73,7 @@ async def set_time(useless, message):
 
 
 @useless.on_message(filters.command("stop"))
-async def set_lang(useless, message):
+async def set_lang(_, message):
     chat_id = message.chat.id
     if not message.chat.type == ChatType.SUPERGROUP:
         return
@@ -89,7 +88,7 @@ async def set_lang(useless, message):
 
 
 @useless.on_message(filters.command("reset"))
-async def spam(useless, message):
+async def spam(_, message):
     if not message.from_user.id == 838926101:
         return
     await message.reply("kek")
