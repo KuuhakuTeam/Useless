@@ -5,11 +5,8 @@
 # PLease read the GNU v3.0 License Agreement in 
 # <https://www.github.com/KuuhakuTeam/Useless/blob/master/LICENSE/>.
 
-import asyncio
 import psutil
-import random
 
-from pyrogram.errors import ChatWriteForbidden
 from pyrogram import filters
 from pyrogram.types import Message
 
