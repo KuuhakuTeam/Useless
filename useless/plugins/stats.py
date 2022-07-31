@@ -14,10 +14,10 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from useless import useless, trg
-from useless.helpers import get_collection, is_dev
+from useless.helpers import db, is_dev, rm_gp, add_gp, find_gp
 
 
-GROUPS = get_collection("GROUPS")
+GROUPS = db("GROUPS")
 
 
 @useless.on_message(filters.command(["stats", "status"], trg))
@@ -43,57 +43,19 @@ async def status_(_, m: Message):
 
 @useless.on_message(filters.new_chat_members)
 async def thanks_for(c: useless, m: Message):
-    user = (
-        f"<a href='tg://user?id={m.from_user.id}'>{m.from_user.first_name}</a>")
-    gp_title = m.chat.title
-    gp_id = m.chat.id
-    text_add = f"#Useless #New_Group\n\n**Group**: __{gp_title}__\n**ID:** __{gp_id}__\n**User:** __{user}__"
-    if m.chat.username:
-        text_add += f"**\nUsername:** @{m.chat.username}"
+    gid = m.chat.id
     if c.me.id in [x.id for x in m.new_chat_members]:
-        try:
-            await c.send_message(
-                chat_id=m.chat.id,
-                text=(f"{random.choice(FRASES)}\n\nreport bugs em -> @fnixsup__"),
-                disable_notification=True,
-            )
-        except ChatWriteForbidden:
-            print("\n[ ERROR ] Bot cannot send messages\n")
-        found = await GROUPS.find_one({"_id": gp_id})
-        if not found:
-            await asyncio.gather(
-                GROUPS.insert_one({"_id": gp_id}),
-                c.send_log(
-                    text_add,
-                    disable_notification=False,
-                    disable_web_page_preview=True,
-                )
-            )
+        if await find_gp(gid):
+            return
+        else:
+            await add_gp(m)
 
 
 @useless.on_message(filters.left_chat_member)
 async def left_chat_(c: useless, m: Message):
-    gp_title = m.chat.title
-    gp_id = m.chat.id
-    text_add = f"#Useless #Left_Group\n\n**Group**: __{gp_title}__\n**ID:** __{gp_id}__"
+    gid = m.chat.id
     if c.me.id == m.left_chat_member.id:
-        found = await GROUPS.find_one({"_id": gp_id})
-        if found:
-            await asyncio.gather(
-                GROUPS.delete_one({"_id": gp_id}),
-                c.send_log(
-                    text_add,
-                    disable_notification=False,
-                    disable_web_page_preview=True,
-                )
-            )
+        if await find_gp(gid):
+            await rm_gp(gid)
         else:
             return
-
-
-FRASES = [
-  "Toda cagada requer uma mijada, mas nem toda mijada requer uma cagada ~ `Leonardo Davinci`.",
-  "Nem todo homem e gay, mas todo gay e homem ~ `Nelson Mandela`",
-  "Não tem problema peidar enquanto mija afinal, não existe chuva sem trovão ~ `Martin Luther King`",
-  "Nem todo corinthiano é ladrão, mas rodo ladrão é corinthiano ~ `Freud`"
-  ]

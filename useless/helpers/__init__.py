@@ -6,4 +6,5 @@
 # <https://www.github.com/KuuhakuTeam/Useless/blob/master/LICENSE/>.
 
 from .tools import is_dev, check_rights
-from .db import get_collection
+from .core import db
+from .dbgroup import *

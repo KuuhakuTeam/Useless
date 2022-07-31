@@ -8,10 +8,18 @@
 from .bot import useless
 from pyrogram import idle
 import asyncio
-from .helpers.db import _close_db
+from .helpers.core import _close_db
+from useless.plugins.useless import info
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
+scheduler = AsyncIOScheduler()
+
 
 async def main():
     await useless.start()
+    scheduler.add_job(info, "interval", hours=3, id='useless')
+    scheduler.start()
     await idle()
     await useless.stop()
     _close_db()

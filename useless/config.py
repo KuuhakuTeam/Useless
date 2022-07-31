@@ -24,6 +24,5 @@ class Config:
     GP_LOGS = int(os.environ.get("GP_LOGS"))
     DB_URI = os.environ.get("DB_URI")
     TRIGGER = os.environ.get("TRIGGER", "/ ! . :".split())
-    TIMER = int(os.environ.get("TIMER"))
 
 trg = Config.TRIGGER
