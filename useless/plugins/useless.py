@@ -44,7 +44,7 @@ async def spam(_, message):
     if message.chat.type == ChatType.PRIVATE:
         await useless.send_photo(message.chat.id, "https://telegra.ph/file/c8fbbcb6a72c7bdf98ade.jpg", caption=random.choice(RANDOM), reply_markup=keyboard)
     else:
-        msg = "<b>/addchat - to add chat to bot info list\n/stop - to stop receiving messages from me here.</b>"
+        msg = "<b>/addchat - to add chat to bot info list\n/lang - to set the information language\n/stop - to stop receiving messages from me here.</b>"
         await message.reply(msg)
 
 
@@ -78,8 +78,8 @@ async def set_lang_(_, message):
         return
     if not await check_rights(message.chat.id, message.from_user.id):
         return await message.reply("<i>You need to be admin to do this.</i>")
-    if await find_gp(chat_id):
-        await message.reply("<i>The chat is already on the useless list.</i>")
+    if not await find_gp(chat_id):
+        await message.reply("<i>This chat is not on the useless list, use /addchat to add.</i>")
     else:
         buttons_ = InlineKeyboardMarkup(
             [
