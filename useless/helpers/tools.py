@@ -2,10 +2,13 @@
 # Copyright (C) 2022 KuuhakuTeam
 #
 # This file is a part of < https://github.com/KuuhakuTeam/Useless/ >
-# PLease read the GNU v3.0 License Agreement in 
+# PLease read the GNU v3.0 License Agreement in
 # <https://www.github.com/KuuhakuTeam/Useless/blob/master/LICENSE/>.
 
+import html
+
 from pyrogram.enums import ChatMemberStatus
+
 from useless import Config, useless
 
 
@@ -25,3 +28,8 @@ async def check_rights(chat_id: int, user_id: int) -> bool:
         return True
     else:
         return False
+
+
+def mention_html(user_id, name):
+    return u'<a href="tg://user?id={}">{}</a>'.format(
+        user_id, html.escape(name))

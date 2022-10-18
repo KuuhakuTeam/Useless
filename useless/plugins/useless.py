@@ -18,7 +18,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQ
 
 
 from useless import useless, trg
-from useless.helpers import db, check_rights, add_gp, add_lang, find_gp, find_lang, rm_gp
+from useless.helpers import db, check_rights, Groups
 
 
 DB = db("GROUPS")
@@ -27,8 +27,8 @@ API = "https://uselessfacts.jsph.pl/random.json?language=en"
 scheduler = AsyncIOScheduler()
 
 
-@useless.on_message(filters.command(["start", "help", "about"], trg))
-async def spam(_, message):
+@useless.on_message(filters.command(["start"], trg))
+async def starting(_, message):
     keyboard = InlineKeyboardMarkup(
         [
             [
@@ -42,19 +42,10 @@ async def spam(_, message):
         ]
     )
     if message.chat.type == ChatType.PRIVATE:
-        await useless.send_photo(message.chat.id, "https://telegra.ph/file/c8fbbcb6a72c7bdf98ade.jpg", caption=random.choice(RANDOM), reply_markup=keyboard)
+        await useless.send_photo(message.chat.id, "https://telegra.ph/file/2ce17b14b27631a05a113.png", caption=random.choice(RANDOM), reply_markup=keyboard)
     else:
         msg = "<b>/addchat - to add chat to bot info list\n/lang - to set the information language\n/stop - to stop receiving messages from me here.</b>"
         await message.reply(msg)
-
-
-@useless.on_message(filters.command("infos", trg))
-async def start_info(_, message):
-    if not message.from_user.id == 838926101:
-        return
-    scheduler.add_job(info, "interval", hours=3, id='useless')
-    scheduler.start()
-    await useless.send_message(message.chat.id, "loop started")
 
 
 @useless.on_message(filters.command("addchat", trg))
@@ -64,10 +55,10 @@ async def add_to_list(_, message):
         return
     if not await check_rights(message.chat.id, message.from_user.id):
         return await message.reply("<i>You need to be admin to do this.</i>")
-    if await find_gp(chat_id):
+    if await Groups.find_gp(chat_id):
         await message.reply("<i>The chat is already on the useless list.</i>")
     else:
-        await add_gp(message)
+        await Groups.add_gp(message)
         await message.reply("<i>Chat has been added to useless list</i>")
 
 
@@ -78,7 +69,7 @@ async def set_lang_(_, message):
         return
     if not await check_rights(message.chat.id, message.from_user.id):
         return await message.reply("<i>You need to be admin to do this.</i>")
-    if not await find_gp(chat_id):
+    if not await Groups.find_gp(chat_id):
         await message.reply("<i>This chat is not on the useless list, use /addchat to add.</i>")
     else:
         buttons_ = InlineKeyboardMarkup(
@@ -102,9 +93,9 @@ async def set_language(_, cb: CallbackQuery):
         if not await check_rights(gid, cb.from_user.id):
             return await cb.answer("You need to be admin to do this", show_alert=True)
     if lang == "pt":
-        await add_lang(gid, "pt")
+        await Groups.add_lang(gid, "pt")
     else:
-        await add_lang(gid, "en")
+        await Groups.add_lang(gid, "en")
     await cb.edit_message_text(f"Information will be sent in {lang}")
 
 
@@ -115,8 +106,8 @@ async def stop_infos(_, message):
         return
     if not await check_rights(message.chat.id, message.from_user.id):
         return await message.reply("<i>You need to be admin to do this.</i>")
-    if await find_gp(chat_id):
-        await rm_gp(chat_id)
+    if await Groups.find_gp(chat_id):
+        await Groups.rm_gp(chat_id)
         await message.reply("<i>Okay, I won't send messages here anymore.</i>")
     else:
         await message.reply("<i>This chat is not on the useless list.</i>")
@@ -131,17 +122,20 @@ async def info():
             gid = chats["_id"]
             data = requests.get(API).json()
             msg = data["text"]
-            lang = await find_lang(gid)
+            lang = await Groups.find_lang(gid)
             if lang == "pt":
                 tr = Translator()
                 tr_ = await tr.translate(msg, targetlang="pt")
                 msg = tr_.text
             try:
                 await useless.send_message(chat_id=gid, text=msg)
-            except (ChatIdInvalid, ChatWriteForbidden, ChannelInvalid):
-                await rm_gp(gid)
+            except (ChatIdInvalid, ChannelInvalid):
+                await Groups.rm_gp(gid)
                 pass
-            except Exception:
+            except ChatWriteForbidden:
+                pass
+            except Exception as e:
+                await useless.send_log(e, disable_notification=False, disable_web_page_preview=True)
                 pass
 
 
