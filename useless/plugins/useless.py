@@ -13,7 +13,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from pyrogram import filters
 from pyrogram.enums import ChatType
-from pyrogram.errors import ChatIdInvalid, ChatWriteForbidden, ChannelInvalid, ChannelPrivate
+from pyrogram.errors import ChatIdInvalid, ChatWriteForbidden, ChannelInvalid, ChannelPrivate, PeerIdInvalid
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 
@@ -129,7 +129,7 @@ async def info():
                 msg = tr_.text
             try:
                 await useless.send_message(chat_id=gid, text=msg)
-            except (ChatIdInvalid, ChannelInvalid, ChannelPrivate):
+            except (ChatIdInvalid, ChannelInvalid, ChannelPrivate, PeerIdInvalid):
                 await Groups.rm_gp(gid)
                 pass
             except ChatWriteForbidden:
