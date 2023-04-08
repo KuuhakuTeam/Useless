@@ -49,5 +49,8 @@ class UselessBot(Client):
             **kwargs,
         )
 
+    async def leave(self, gid: int):
+        await self.leave_chat(chat_id=gid)
+
 
 useless = UselessBot()
